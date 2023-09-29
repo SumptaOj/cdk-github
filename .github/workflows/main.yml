@@ -29,7 +29,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: ${{ env.AWS_REGION }}
-          role-to-assume: arn:aws:iam::222992171503:role/Github_webid_role
+          role-to-assume: arn:aws:iam::222992171503:role/GitHubAction-AssumeRoleWithAction
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
 
       - name: install npm
