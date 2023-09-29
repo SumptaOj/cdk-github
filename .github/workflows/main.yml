@@ -1,0 +1,59 @@
+name: Deploy AWS CDK
+
+# Controls when the action will run. 
+on:
+  push:
+    branches: [ main ]
+  #pull_request:
+    #branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  #workflow_dispatch:
+
+env:
+    AWS_REGION : eu-central-1
+
+# Permission can be added at job level or workflow level    
+permissions:
+    id-token: write   # This is required for requesting the JWT
+    contents: read    # This is required for actions/checkou
+
+jobs:
+  aws_cdk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: arn:aws:iam::222992171503:role/Github_webid_role
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+
+      - name: install npm
+        run: 'sudo apt update -y && sudo apt install nodejs npm -y'
+
+      - name: Install AWS CDK
+        run: 'sudo npm install -g aws-cdk' 
+
+      - name: Install Requirements 
+        run: 'pip3 install -r requirements.txt'
+        working-directory: .
+
+      - name: CDK Synth
+        run: cdk synth
+        working-directory: .
+              
+      - name: CDK bootstrap
+        run: cdk bootstrap
+        working-directory: .
+
+      - name: CDK Deploy
+        run: cdk deploy --require-approval never
+        working-directory: .
+        
+      - name: CDK Destroy
+        run: cdk destroy --force
+        working-directory: .
