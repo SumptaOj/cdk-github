@@ -39,7 +39,9 @@ jobs:
         run: 'sudo npm install -g aws-cdk' 
 
       - name: Install Requirements 
-        run: 'pip3 install -r requirements.txt'
+        run: |
+            'source .venv/bin/activate'
+            'pip3 install -r requirements.txt'
         working-directory: .
 
       - name: CDK Synth
