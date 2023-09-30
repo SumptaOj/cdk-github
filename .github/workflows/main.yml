@@ -44,16 +44,16 @@ jobs:
 
       - name: CDK Synth
         run: cdk synth
-        working-directory: cdk_github
+        working-directory: ./cdk_github
               
       - name: CDK bootstrap
         run: cdk bootstrap
-        working-directory: cdk_github
+        working-directory: ./cdk_github
 
       - name: CDK Deploy
         run: cdk deploy --require-approval never
-        working-directory: cdk_github
+        working-directory: ./cdk_github
         
       - name: CDK Destroy
         run: cdk destroy --force
-        working-directory: cdk_github
+        working-directory: ./cdk_github
