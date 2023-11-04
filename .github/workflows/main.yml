@@ -16,7 +16,7 @@ env:
 # Permission can be added at job level or workflow level    
 permissions:
     id-token: write   # This is required for requesting the JWT
-    contents: read    # This is required for actions/checkou
+    contents: read # This is required for actions/checkou
 
 jobs:
   aws_cdk:
@@ -68,5 +68,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
-      - run: pip install mkdocs-material
-      - run: mkdocs gh-deploy --force
+      - name: Install MkDocs
+        run: pip install mkdocs mkdocs-material
+      - name: Build Documenation
+        run: mkdocs build
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
